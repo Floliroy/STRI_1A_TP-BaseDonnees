@@ -109,7 +109,14 @@ WHERE codeEq = (SELECT codeEq
 AND nomCh <> 'Hedi';
 
 --Question 15
-CREATE OR REPLACE VIEW v_exactement_hedi AS
+SELECT c.nomCh --au moins
+FROM Chercheur c
+WHERE NOT EXISTS (
+(SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = 'Hedi'
+	EXCEPT SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = c.nomCh))
+AND c.nomCh  <> 'Hedi';
+
+--Question 16
 SELECT c.nomCh --exactement
 FROM Chercheur c
 WHERE NOT EXISTS (
@@ -120,20 +127,7 @@ UNION ALL
 	EXCEPT SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = c.nomCh))
 AND c.nomCh  <> 'Hedi';
 
-CREATE OR REPLACE VIEW v_plus_que_hedi AS
-SELECT c.nomCh --plus que
-FROM Chercheur c
-WHERE EXISTS (
-SELECT t0.codeTh FROM Chercheur c0, Travailler t0 WHERE c0.codeCh = t0.codeCh AND c0.nomCh = c.nomCh 
-	EXCEPT SELECT t1.codeTh FROM Chercheur c1, Travailler t1 WHERE c1.codeCh = t1.codeCh AND c1.nomCh = 'Hedi'
-)
-AND NOT EXISTS (
-SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = 'Hedi'
-	EXCEPT SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = c.nomCh 
-)
-AND c.nomCh  <> 'Hedi';
-
-CREATE OR REPLACE VIEW v_au_plus_hedi AS
+--Question 17
 SELECT c.nomCh --au plus
 FROM Chercheur c
 WHERE NOT EXISTS (
@@ -143,21 +137,6 @@ UNION ALL
 (SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = c.nomCh)
 	EXCEPT SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = 'Hedi')
 AND c.nomCh  <> 'Hedi';
-
-CREATE OR REPLACE VIEW v_au_moins_hedi AS
-SELECT DISTINCT *
-FROM v_plus_que_hedi
-UNION
-SELECT DISTINCT *
-FROM v_exactement_hedi; 
-
-SELECT * FROM v_au_moins_hedi;
-
---Question 16
-SELECT * FROM v_exactement_hedi;
-
---Question 17
-SELECT * FROM v_au_plus_hedi;
 
 
 --Question 18
