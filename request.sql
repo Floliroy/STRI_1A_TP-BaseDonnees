@@ -107,3 +107,97 @@ WHERE codeEq = (SELECT codeEq
                 FROM Chercheur
                 WHERE nomCh = 'Hedi')
 AND nomCh <> 'Hedi';
+
+--Question 15
+CREATE OR REPLACE VIEW v_exactement_hedi AS
+SELECT c.nomCh --exactement
+FROM Chercheur c
+WHERE NOT EXISTS (
+(SELECT t1.codeTh FROM Chercheur c1, Travailler t1 WHERE c1.codeCh = t1.codeCh AND c1.nomCh = c.nomCh
+	EXCEPT SELECT t0.codeTh FROM Chercheur c0, Travailler t0 WHERE c0.codeCh = t0.codeCh AND c0.nomCh = 'Hedi')
+UNION ALL
+(SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = 'Hedi'
+	EXCEPT SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = c.nomCh))
+AND c.nomCh  <> 'Hedi';
+
+CREATE OR REPLACE VIEW v_plus_que_hedi AS
+SELECT c.nomCh --plus que
+FROM Chercheur c
+WHERE EXISTS (
+SELECT t0.codeTh FROM Chercheur c0, Travailler t0 WHERE c0.codeCh = t0.codeCh AND c0.nomCh = c.nomCh 
+	EXCEPT SELECT t1.codeTh FROM Chercheur c1, Travailler t1 WHERE c1.codeCh = t1.codeCh AND c1.nomCh = 'Hedi'
+)
+AND NOT EXISTS (
+SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = 'Hedi'
+	EXCEPT SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = c.nomCh 
+)
+AND c.nomCh  <> 'Hedi';
+
+CREATE OR REPLACE VIEW v_au_plus_hedi AS
+SELECT c.nomCh --au plus
+FROM Chercheur c
+WHERE NOT EXISTS (
+(SELECT t0.codeTh FROM Chercheur c0, Travailler t0 WHERE c0.codeCh = t0.codeCh AND c0.nomCh = 'Hedi' 
+	EXCEPT SELECT t1.codeTh FROM Chercheur c1, Travailler t1 WHERE c1.codeCh = t1.codeCh AND c1.nomCh = c.nomCh)
+UNION ALL
+(SELECT t2.codeTh FROM Chercheur c2, Travailler t2 WHERE c2.codeCh = t2.codeCh AND c2.nomCh = c.nomCh)
+	EXCEPT SELECT t3.codeTh FROM Chercheur c3, Travailler t3 WHERE c3.codeCh = t3.codeCh AND c3.nomCh = 'Hedi')
+AND c.nomCh  <> 'Hedi';
+
+CREATE OR REPLACE VIEW v_au_moins_hedi AS
+SELECT DISTINCT *
+FROM v_plus_que_hedi
+UNION
+SELECT DISTINCT *
+FROM v_exactement_hedi; 
+
+SELECT * FROM v_au_moins_hedi;
+
+--Question 16
+SELECT * FROM v_exactement_hedi;
+
+--Question 17
+SELECT * FROM v_au_plus_hedi;
+
+
+--Question 18
+SELECT nomEq 
+FROM Equipe e
+WHERE NOT EXISTS (
+    SELECT * FROM Theme t WHERE NOT EXISTS (
+    	SELECT * FROM Definir d
+    	WHERE d.codeEq = e.codeEq
+    	AND d.codeTh = t.codeTh
+	)
+);
+
+--Question 19
+CREATE TABLE Publication(
+	codePub integer PRIMARY KEY,
+	nomPub text,
+	typePub text,
+  	codeAut integer
+);
+ALTER TABLE Publication 
+ADD CONSTRAINT fk_publication
+FOREIGN KEY (codeAut) REFERENCES Chercheur(codeCh);
+
+INSERT INTO Publication(codePub, nomPub, typePub, codAut) VALUES
+	(1, 'Formes Normales dans les BD objets', 'thèse', 5),
+	(2, 'Vers un nouveau langage pour les non voyants', 'article', 5),
+	(3, 'Alimenter des ontologies par les textes', 'thèse', 20);
+
+SELECT nomCh
+FROM Chercheur
+WHERE codeCh NOT IN (
+	SELECT codeAut
+	FROM Publication 
+);
+
+--Question 20
+SELECT DISTINCT c.nomCh,
+	(SELECT COUNT(*)
+	FROM Publication
+	WHERE codeAut = c.codeCh)
+FROM Chercheur c, Publication p
+WHERE c.codeCh = p.codeAut;
