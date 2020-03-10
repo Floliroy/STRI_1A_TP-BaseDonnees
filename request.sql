@@ -15,7 +15,7 @@ WHERE c.codeEq = e.codeEq;
 SELECT c.nomCh
 FROM Chercheur c, Equipe e
 WHERE c.codeEq = e.codeEq
-AND e.nomEq = 'Molecule';
+AND e.nomEq = 'Elipse';
 
 --Ajout Colone
 ALTER TABLE Equipe 
@@ -38,13 +38,13 @@ SELECT nomEq
 FROM Equipe
 WHERE budget > (SELECT budget
                 FROM Equipe
-                WHERE nomEq = 'Molecule');
+                WHERE nomEq = 'Elipse');
 
 --Question 7
 SELECT COUNT(*)
 FROM Chercheur c, Equipe e
 WHERE c.codeEq = e.codeEq 
-AND e.nomEq = 'Molecule';
+AND e.nomEq = 'Elipse';
 
 --Question 8
 SELECT c.nomCh, (SELECT COUNT(tr.codeTh)
@@ -72,33 +72,33 @@ SELECT DISTINCT c.nomCh
 FROM Chercheur c, Travailler tr, Theme th
 WHERE c.codeCh = tr.codeCh
 AND th.codeTh = tr.codeTh
-AND th.libelle IN ('Programmation', 'Technologie');
+AND th.libelle IN ('Bases de Données', 'Langage Naturel');
 
 --Question 12
 SELECT c.nomCh
 FROM Chercheur c, Travailler tr, Theme th
 WHERE c.codeCh = tr.codeCh
 AND th.codeTh = tr.codeTh
-AND th.libelle = 'Programmation'
+AND th.libelle = 'Bases de Données'
 EXCEPT
 SELECT c.nomCh
 FROM Chercheur c, Travailler tr, Theme th
 WHERE c.codeCh = tr.codeCh
 AND th.codeTh = tr.codeTh
-AND th.libelle = 'Technologie';
+AND th.libelle = 'Langage Naturel';
 
 --Question 13
 SELECT c.nomCh
 FROM Chercheur c, Travailler tr, Theme th
 WHERE c.codeCh = tr.codeCh
 AND th.codeTh = tr.codeTh
-AND th.libelle = 'Programmation'
+AND th.libelle = 'Bases de Données'
 INTERSECT
 SELECT c.nomCh
 FROM Chercheur c, Travailler tr, Theme th
 WHERE c.codeCh = tr.codeCh
 AND th.codeTh = tr.codeTh
-AND th.libelle = 'Technologie';
+AND th.libelle = 'Langage Naturel';
 
 --Question 14
 SELECT nomCh

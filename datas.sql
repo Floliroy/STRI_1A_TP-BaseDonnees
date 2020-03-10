@@ -35,7 +35,7 @@ INSERT INTO Laboratoire(codeLabo, type, nomLabo, URL, codeDir) VALUES
 INSERT INTO Equipe(codeEq, nomEq, codeResp, codeLabo) VALUES
     (1, 'Bacterie', 3, 1),
     (2, 'Virus', 6, 1),
-    (3, 'Molecule', 8, 1),
+    (3, 'Elipse', 8, 1),
     (4, 'Onde', 12, 3),
     (5, 'Satellite', 16, 2),
     (6, 'Genetique', 18, 3),
@@ -48,8 +48,8 @@ INSERT INTO Theme(codeTh, libelle) VALUES
     (4, 'Reaction'),
     (5, 'Développement Durable'),
     (6, 'Enseignement'),
-    (7, 'Technologie'),
-    (8, 'Programmation');
+    (7, 'Langage Naturel'),
+    (8, 'Bases de Données');
 
 INSERT INTO Definir(codeEq, codeTh) VALUES
     (1,4),
