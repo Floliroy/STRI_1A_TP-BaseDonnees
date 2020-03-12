@@ -4,6 +4,7 @@ ALTER TABLE Equipe DISABLE TRIGGER ALL;
 ALTER TABLE Theme DISABLE TRIGGER ALL;
 ALTER TABLE Definir DISABLE TRIGGER ALL;
 ALTER TABLE Travailler DISABLE TRIGGER ALL;
+--On desactive les constraint pour rentrer les premieres datas
 
 INSERT INTO Chercheur(codeCh, nomCh, codeEq) VALUES
     (1, 'Terrier', 1),
@@ -16,7 +17,7 @@ INSERT INTO Chercheur(codeCh, nomCh, codeEq) VALUES
     (8, 'Lourdel', 3),
     (9, 'Achibane', 3),
     (10, 'Val', 4),
-    (11, 'Cambon', 4),
+    (11, 'Cambon', 2),
     (12, 'Acila', 4),
     (13, 'Aoun', 1),
     (14, 'Galy', 1),
@@ -25,7 +26,8 @@ INSERT INTO Chercheur(codeCh, nomCh, codeEq) VALUES
     (17, 'Einstein', 5),
     (18, 'Rousseau', 6),
     (19, 'Heimer', 7),
-    (20, 'Eric', 7);
+    (20, 'Eric', 7),
+    (21, 'Mood', 8);
 
 INSERT INTO Laboratoire(codeLabo, type, nomLabo, URL, codeDir) VALUES
     (1, 'INRIA', 'Atomic', '', 2),
@@ -39,7 +41,8 @@ INSERT INTO Equipe(codeEq, nomEq, codeResp, codeLabo) VALUES
     (4, 'Onde', 12, 3),
     (5, 'Satellite', 16, 2),
     (6, 'Genetique', 18, 3),
-    (7, 'Laser', 20, 2);
+    (7, 'Laser', 20, 2),
+    (8, 'Biologie', 8, 1);
 
 INSERT INTO Theme(codeTh, libelle) VALUES
     (1, 'Radioactif'),
@@ -66,7 +69,15 @@ INSERT INTO Definir(codeEq, codeTh) VALUES
     (5,7),
     (5,8),
     (6,6),
-    (7,8);
+    (7,8),
+    (8,1),
+    (8,2),
+    (8,3),
+    (8,4),
+    (8,5),
+    (8,6),
+    (8,7),
+    (8,8);
 
 INSERT INTO Travailler(codeCh, codeTh) VALUES
     (1,4),
@@ -95,8 +106,11 @@ INSERT INTO Travailler(codeCh, codeTh) VALUES
     (17,8),
     (18,6),
     (19,8),
-    (20,8);
+    (20,8),
+    (21,3),
+    (21,1);
 
+--On les réactive quand on a fini
 ALTER TABLE Chercheur ENABLE TRIGGER ALL;
 ALTER TABLE Laboratoire ENABLE TRIGGER ALL;
 ALTER TABLE Equipe ENABLE TRIGGER ALL;
